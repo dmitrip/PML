@@ -79,7 +79,7 @@ end
 % get upper bound on F0
 if nargin == 1
     F0 = 0; % extra 0 entries
-    step_size = 10;
+    step_size = 1;
     F0_max = num_bins^2;
     V0 = f0(V, counts, multiplicities, 0, n, num_bins, B) - gammaln(0+1);
     
@@ -96,8 +96,6 @@ if nargin == 1
         else
             step_size = step_size*2;
             if F0 > F0_max,
-                %             warning('inferred support size exceeds max of length(p)^2');
-%                 warning('inferred support size exceeds max of 100*length(p)');
                 reached_max_F0 = true;
                 done = true;
             end
@@ -144,8 +142,6 @@ else
     end
 end
 F0_est = F0;
-
-% keyboard
 
 if ~isinf(F0)
     [Vmax,imax] = f0(V, counts, multiplicities, F0, n, num_bins, B);
