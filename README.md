@@ -3,7 +3,7 @@ Profile maximum likelihood approximations
 
 <a name="logo"/>
 <div align="center">
-<img src="https://github.com/dmitrip/PML/blob/master/.github/PML_approximation.png" alt="PML approximate distribution" width="210" height="142"></img>
+<img src="https://github.com/dmitrip/PML/blob/master/.github/PML_approximation.png" alt="PML approximate distribution"></img>
 </a>
 </div>
 
