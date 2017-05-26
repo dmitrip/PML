@@ -1,6 +1,12 @@
 # PML
 Profile maximum likelihood approximations
 
+<a name="logo"/>
+<div align="center">
+<img src="https://github.com/dmitrip/PML/blob/master/.github/PML_approximation.png" alt="PML approximate distribution" width="210" height="142"></img>
+</a>
+</div>
+
 ## Profile maximum likelihood
 
 For samples $x_1^n = (x_1,\ldots,x_n)$ with empirical distribution $\hat{p}$, the profile maximum likelihood (PML) distribution $p^*_\text{PML}$ maximizes the probability of observing any relabeling of $\hat{p}$:
