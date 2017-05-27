@@ -39,7 +39,7 @@ The PML distribution can be plugged into a functional of a distribution to obtai
     H_est = entropyOfDistribution(p_PML_approx) # output: 3 (log base 2)
     Renyi_est = renyiEntropyOfDistribution(p_PML_approx, 2) # output: 3 (log base 2)
     
-The functions `estEntroPMLapproximate` and `estRenyiEntroPMLapproximate` compute the PML plug-in estimates given a sample, rather than an empirical histogram.
+The functions `estEntroPMLapproximate` and `estRenyiEntroPMLapproximate` wrap the above steps into one function call and compute the PML plug-in estimates given a sample, rather than an empirical histogram.
 
 ## Python
 
