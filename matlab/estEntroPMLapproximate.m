@@ -43,4 +43,4 @@ if not_have_valid_K_est
 end
 
 % plug-in to entropy functional
-H_est = GetH(p_approx, 2);
+H_est = entropyOfDistribution(p_approx, 2);
