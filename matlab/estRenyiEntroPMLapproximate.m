@@ -35,7 +35,8 @@ if nargin == 3
     not_have_valid_K_est = false;
 else
     % estimate support set size
-    [p_approx, K_est, ~, not_have_valid_K_est] = PMLdistributionApproximate(hist_vec);
+    [p_approx,F0_est,~,not_have_valid_K_est] = PMLdistributionApproximate(hist_vec);
+    K_est = sum(hist_vec > 0) + F0_est;
 end
 
 if not_have_valid_K_est
