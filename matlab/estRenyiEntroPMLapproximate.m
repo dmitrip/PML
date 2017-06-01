@@ -21,7 +21,7 @@ function [RenyiH_est, K_est] = estRenyiEntroPMLapproximate(samp,alpha,K)
 %         If K is not provided, then we attempt to estimate the support set size
 %
 % Returns:
-%     * H_est - (double) estimate for entropy, log base 2
+%     * H_est - (double) estimate for Renyi entropy, log base 2
 %     * K_est - (integer) estimate for support set size
 %
 % Example:
@@ -43,5 +43,5 @@ if not_have_valid_K_est
     warning('do not have valid estimate for support set size')
 end
 
-% plug-in to entropy functional
+% plug-in to Renyi entropy functional
 RenyiH_est = renyiEntropyOfDistribution(p_approx, alpha, 2);

@@ -20,7 +20,7 @@ function [H_est, K_est] = estEntroPMLapproximate(samp,K)
 %         If K is not provided, then we attempt to estimate the support set size
 %
 % Returns:
-%     * H_est - (double) estimate for Renyi entropy, log base 2
+%     * H_est - (double) estimate for entropy, log base 2
 %     * K_est - (integer) estimate for support set size
 %
 % Example:
