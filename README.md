@@ -43,7 +43,14 @@ The functions `estEntroPMLapproximate` and `estRenyiEntroPMLapproximate` wrap th
 
 ## Python
 
-Coming soon.
+### Estimating functionals of a distribution
+
+The PML distribution can be plugged into a functional of a distribution to obtain the PML plug-in estimate of the functional.  To estimate the entropy and R\'enyi entropy with $\alpha = 2$:
+
+    import pml
+    sample = [1,3,4,1,5]
+    H_est = pml.estimate_entropy_PML_approximate(sample) # H_est == 3.0
+    RenyiH_est = pml.estimate_Renyi_entropy_PML_approximate(sample,2) # RenyiH_est 3.0
 
 ## Julia
 
