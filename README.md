@@ -35,11 +35,11 @@ The approximate PML distribution may not have a finite support set size, in whic
 
 The PML distribution can be plugged into a functional of a distribution to obtain the PML plug-in estimate of the functional.  To estimate the entropy and R\'enyi entropy with $\alpha = 2$:
 
-    ```matlab
-    p_PML_approx = PMLdistributionApproximate([2 1 1 1]) % output: ones(8,1)./8
-    H_est = entropyOfDistribution(p_PML_approx) % output: 3 (log base 2)
-    Renyi_est = renyiEntropyOfDistribution(p_PML_approx, 2) % output: 3 (log base 2)
-    ```
+```matlab
+p_PML_approx = PMLdistributionApproximate([2 1 1 1]) % output: ones(8,1)./8
+H_est = entropyOfDistribution(p_PML_approx) % output: 3 (log base 2)
+Renyi_est = renyiEntropyOfDistribution(p_PML_approx, 2) % output: 3 (log base 2)
+```
     
 The functions `estEntroPMLapproximate` and `estRenyiEntroPMLapproximate` wrap the above steps into one function call and compute the PML plug-in estimates given a sample, rather than an empirical histogram.
 
@@ -49,12 +49,12 @@ The functions `estEntroPMLapproximate` and `estRenyiEntroPMLapproximate` wrap th
 
 The PML distribution can be plugged into a functional of a distribution to obtain the PML plug-in estimate of the functional.  To estimate the entropy and R\'enyi entropy with $\alpha = 2$:
 
-    ```python
-    import pml
-    sample = [1,3,4,1,5]
-    H_est = pml.estimate_entropy_PML_approximate(sample) # H_est == 3.0
-    RenyiH_est = pml.estimate_Renyi_entropy_PML_approximate(sample,2) # RenyiH_est 3.0
-    ```
+```python
+import pml
+sample = [1,3,4,1,5]
+H_est = pml.estimate_entropy_PML_approximate(sample) # H_est == 3.0
+RenyiH_est = pml.estimate_Renyi_entropy_PML_approximate(sample,2) # RenyiH_est 3.0
+```
 
 ## Julia
 
