@@ -51,6 +51,13 @@ The functions `estEntroPMLapproximate` and `estRenyiEntroPMLapproximate` wrap th
 
 ## Python
 
+Computing the approximate PML distribution for a sample.  Samples must be nonnegative-integer-valued.
+
+```python
+sample = [0,3,4,0,5]
+empirical_histogram = pml.int_hist(sample) # array([2, 0, 0, 1, 1, 1]) 
+p_PML_approx = pml.PML_distribution_approximate(empirical_histogram)[0] # ones(8)./8
+```
 ### Estimating functionals of a distribution
 
 The PML distribution can be plugged into a functional of a distribution to obtain the PML plug-in estimate of the functional.  To estimate the entropy and R\'enyi entropy with $\alpha = 2$:
