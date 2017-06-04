@@ -231,13 +231,13 @@ def PML_distribution_approximate(p_empirical, K=None):
 
     ## optimize alphabet size
     # get upper bound on F0
+    reached_max_F0 = False
     if K is None:
         F0 = 0 # extra 0 entries
         step_size = 1
         F0_max = num_bins**2
         V0 = f0(V, counts, multiplicities, 0, n, num_bins, B)[0] - special.gammaln(0+1)
 
-        reached_max_F0 = False
         done = False
         while not done:
             F0 += step_size
