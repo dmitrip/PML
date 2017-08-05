@@ -138,7 +138,7 @@ def cumsum_mat(x):
     
     return C
 
-def PML_distribution_approximate(p_empirical, K=None):
+def PML_distribution_approximate(p_empirical, K=None, warn_on_continuous_part=True):
     # approximates pattern maximum likelihood (PML) distribution p_approx
     # where p_approx \approx \arg \max_p P_p(unordered p_empirical)
     # Approximation sums over all permutations that mix within blocks of
@@ -151,6 +151,7 @@ def PML_distribution_approximate(p_empirical, K=None):
     # Optional args:
     #     * K - (integer) assumed support set size, must have K >= sum(p > 0).  
     #         If K is not provided, then we attempt to estimate the support set size
+    #     * warn_on_continuous_part - (bool) true iff warn if inferred distribution has continuous part
     # #     * K_upper_bound - (integer) assumed maximum value for support set
     #         size, use when estimating support set size.  If K_upper_bound is
     #         not provided, then we set K_upper_bound = sum(p == 1)^2
@@ -279,7 +280,8 @@ def PML_distribution_approximate(p_empirical, K=None):
             else:
                 V_cont = 0.0
             if V_cont > V_non_cont:
-                warnings.warn('optimal distribution has continuous part, F0 = inf')
+                if warn_on_continuous_part:
+                    warnings.warn('optimal distribution has continuous part, F0 = inf')
                 F0 = np.inf
     else:
         F0 = K - num_bins
