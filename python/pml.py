@@ -32,17 +32,11 @@ def estimate_entropy_PML_approximate(samp,K=None):
     # get empirical histogram
     hist_vec = int_hist(samp)
 
-    if K is not None:
-        K_est = K
-        p_approx = PMLdistributionApproximate(hist_vec,K)
-        not_have_valid_K_est = False
-    else:
-        # estimate support set size
-        (p_approx,F0_est,_,not_have_valid_K_est) = PML_distribution_approximate(hist_vec)
-        K_est = np.sum(hist_vec > 0) + F0_est
+    # find PML distribution
+    (p_approx,F0_est,_,not_have_valid_K_est) = PML_distribution_approximate(hist_vec,K)
 
-    if not_have_valid_K_est:
-        warnings.warn('do not have valid estimate for support set size')
+    # estimate support set size
+    K_est = K if K is not None else np.sum(hist_vec > 0) + F0_est
 
     # plug-in to entropy functional
     H_est = entropy_of_distribution(p_approx, 2)
@@ -78,17 +72,14 @@ def estimate_Renyi_entropy_PML_approximate(samp,alpha,K=None):
     # get empirical histogram
     hist_vec = int_hist(samp)
 
-    if K is not None:
-        K_est = K
-        p_approx = PMLdistributionApproximate(hist_vec,K)
-        not_have_valid_K_est = False
-    else:
-        # estimate support set size
-        (p_approx,F0_est,_,not_have_valid_K_est) = PML_distribution_approximate(hist_vec)
-        K_est = np.sum(hist_vec > 0) + F0_est
+    # get empirical histogram
+    hist_vec = int_hist(samp)
 
-    if not_have_valid_K_est:
-        warnings.warn('do not have valid estimate for support set size')
+    # find PML distribution
+    (p_approx,F0_est,_,not_have_valid_K_est) = PML_distribution_approximate(hist_vec,K)
+
+    # estimate support set size
+    K_est = K if K is not None else np.sum(hist_vec > 0) + F0_est
 
     # plug-in to Renyi entropy functional
     RenyiH_est = renyi_entropy_of_distribution(p_approx, alpha, 2)
