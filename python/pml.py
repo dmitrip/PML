@@ -313,9 +313,8 @@ def PML_distribution_approximate(p_empirical, K=None, warn_on_continuous_part=Tr
         t_prev = current_multibin
         t = backpointers[current_multibin]
         while current_multibin >= t:
-            for m in range(multiplicities[current_multibin]):
-                p_approx[ix] = prob_mat[t,t_prev]
-                ix -= 1
+            p_approx[(ix-multiplicities[current_multibin]+1):(ix+1)] = prob_mat[t,t_prev]
+            ix -= multiplicities[current_multibin]
             current_multibin -= 1
 
     ##
