@@ -1,4 +1,4 @@
-function [p_approx,F0_est,V_approx,reached_max_F0] = PMLdistributionApproximate(p_empirical,K)
+function [p_approx,F0,V_approx,have_continuous_part] = PMLdistributionApproximate(p_empirical,K)
 % approximates pattern maximum likelihood (PML) distribution p_approx
 % where p_approx \approx \arg \max_p P_p(unordered p_empirical)
 % Approximation sums over all permutations that mix within blocks of
@@ -20,12 +20,10 @@ function [p_approx,F0_est,V_approx,reached_max_F0] = PMLdistributionApproximate(
 % Returns:
 %     * p_approx - (column vector) approximate PML distribution, sorted in
 %         descending order
-%     * F0_est - (integer) estimate for number of symbols seen 0 times in
-%         p_empirical.  If K is provided as an argument, then F0_est = max(K - sum(p > 0), 0)
+%     * F0 - (integer) estimate for number of symbols seen 0 times in
+%         p_empirical.  If K is provided as an argument, then F0 = max(K - sum(p > 0), 0)
 %     * V_approx - (double) approximate value of log(P_p(unordered p_empirical))
 %         achieved by p = p_approx
-%     * reached_max_F0 - (boolean) true iff we did not find an upper bound
-%        when estimating support set size, hit upper bound sum(p > 0) + sum(p == 1)^2
 %
 % Example:
 %     Optimize support set size:
@@ -38,23 +36,24 @@ function [p_approx,F0_est,V_approx,reached_max_F0] = PMLdistributionApproximate(
 %         >> p_approx = PMLdistributionApproximate([9 3 2 1 1]',5)
 %         yields p_approx == [9/16 7/64 77/6/64 7/64 7/64]'
 
+p_empirical = p_empirical(p_empirical > 0); % remove 0-counts
+
 fing = int_hist(p_empirical(:)+1);
 fing = fing(2:end);
-bin_values = flipud(find(fing)); % sort in descending order
-multiplicities = fing(bin_values);
-num_bins = sum(multiplicities);
+fing_supp = find(fing); % sorted in ascending order
+fing_values = fing(fing_supp);
+num_bins = sum(fing_values);
 
-B = length(bin_values); % multibins
-n = sum(bin_values.*multiplicities); % bin counts times multiplicities, sum(bm) = sum(p)
-n_1 = sum(p_empirical == 1); % number of symbols observed once
+B = length(fing_supp); % multibins, F_+
+n = sum(fing_supp.*fing_values); % bin counts times fing_values, sum(bm) = sum(p)
 
-% early detect case n_1 == n?
+% early detect case all symbols observed once?
 
-% get counts and multiplicities cumsum matrix
+% get counts and fing_values cumsum matrix
 % n[i,j] = sum_{k = i to j} n[k]
-counts = bin_values(:).*multiplicities(:);
+counts = fing_supp(:).*fing_values(:);
 counts_mat = cumsum_mat(counts);
-mults_mat = cumsum_mat(multiplicities);
+mults_mat = cumsum_mat(fing_values);
 prob_mat = counts_mat./(n.*mults_mat); % probability within each block
 
 % C[i,j] = log reward assign multibins from i to j to same prob
@@ -62,12 +61,13 @@ log_reward_mat = gammaln(mults_mat+1) + counts_mat.*log(prob_mat);
 log_reward_mat(isnan(log_reward_mat)) = 0.0; % handles 0 log 0 = 0 case, sets below diagonal entries to 0
 
 % V[i] = best log reward for first i bins
-V = zeros(B,1); % V[0] = 0, values matrix
-backpointers = zeros(B,1); % backpointers to get best log reward
-for i = 1:B
-    V(i) = log_reward_mat(1,i);
-    for j = 1:i-1
-        proposal_reward = V(j) + log_reward_mat(j+1,i);
+V = zeros(B,1); % V[B+1] = 0, values matrix
+backpointers = zeros(B,1)-1; % backpointers to get best log reward
+for i = B:-1:1
+    V(i) = log_reward_mat(i,B);
+    backpointers(i) = B;
+    for j = i:(B-1)
+        proposal_reward = log_reward_mat(i,j) + V(j+1);
         if proposal_reward > V(i)
             V(i) = proposal_reward;
             backpointers(i) = j;
@@ -75,119 +75,75 @@ for i = 1:B
     end
 end
 
-%% optimize alphabet size
-% get upper bound on F0
-if nargin == 1
-    F0 = 0; % extra 0 entries
-    step_size = 1;
-    F0_max = num_bins^2;
-    V0 = f0(V, counts, multiplicities, 0, n, num_bins, B) - gammaln(0+1);
-    
-    reached_max_F0 = false;
-    done = false;
-    while ~done,
-        F0 = F0 + step_size;
-        
-        V0_prev = V0;
-        V0 = f0(V, counts, multiplicities, F0, n, num_bins, B) - gammaln(F0+1);
-        
-        if V0_prev >= V0,
-            done = true;
-        else
-            step_size = step_size*2;
-            if F0 > F0_max,
-                reached_max_F0 = true;
-                done = true;
-            end
-        end
-    end
-    F0_max = F0;
-    
-    % get optimum value of F0
-    if ~reached_max_F0
-        F0_lower = 0;
-        F0_upper = F0_max;
-        while F0_lower ~= F0_upper
-            F1 = floor((F0_upper - F0_lower)/3)+F0_lower;
-            F2 = 2*floor((F0_upper - F0_lower)/3)+F0_lower+1;
-            V1 = f0(V, counts, multiplicities, F1, n, num_bins, B) - gammaln(F1+1);
-            V2 = f0(V, counts, multiplicities, F2, n, num_bins, B) - gammaln(F2+1);
-            if V1 - V2 <= -1e-10
-                F0_lower = F1+1;
-            else
-                F0_upper = F2-1;
-            end
-        end
-        F0 = F0_lower;
+%% merge 0s with rest of symbols
+V0_opt = -Inf; % optimal value
+F0_opt = -1;
+i0_opt = 0; % index of optimal fingerprint bin up to which to merge 0s
+for i=1:B
+    T = sum(fing_values(1:i));
+    N = sum(fing_supp(1:i).*fing_values(1:i));
+    if nargin == 2 % assumed alphabet size
+        F0 = K - length(p_empirical);
     else
-        F0 = F0_max;
+        % optimize alphabet size
+        % estimate number of unseen symbols for uniform distribution, N samples, empirical support set size T
+        F0 = ML_unseen_symbols_uniform(T, N);
     end
-    % test to see if have continuous part
-    if bin_values(end) == 1
-        V_non_cont = f0(V, counts, multiplicities, F0, n, num_bins, B) - gammaln(F0+1);
-        if length(bin_values) > 1
-            V_cont = V(end-1) + n_1*log(n_1/n);
-        else
-            V_cont = 0.0;
-        end
-        if V_cont > V_non_cont
-            warning('optimal distribution has continuous part, F0 = Inf');
-            F0 = Inf;
-        end
+    % get value
+    V0 = N*log(N/n);
+    if i < B
+        V0 = V0 + V(i+1); % V[B+1] = 0
     end
-else
-    F0 = K - num_bins;
-    if F0 < 0
-        F0 = 0;
+    if ~isinf(F0) % \lim_{F0 -> \infty} f(F0,T,n=T) = 0
+        V0 = V0 + gammaln(F0+T+1) - gammaln(F0+1) - N*log(F0+T);
+    end
+    % check if best so far
+    if V0 > V0_opt
+        V0_opt = V0;
+        F0_opt = F0;
+        i0_opt = i;
     end
 end
-F0_est = F0;
-
-if ~isinf(F0)
-    [Vmax,imax] = f0(V, counts, multiplicities, F0, n, num_bins, B);
-    backpointers(end+1) = imax;
-    bin_values(end+1) = 0;
-    multiplicities(end+1) = F0;
-    B = B + 1;
-    num_bins = num_bins + F0;
-    counts = bin_values(:).*multiplicities(:);
-    counts_mat = cumsum_mat(counts);
-    mults_mat = cumsum_mat(multiplicities);
-    prob_mat = counts_mat./(n.*mults_mat); % probability within each block
-else
-    Vmax = V_cont;
-    backpointers(end) = [];
-    bin_values(end) = [];
-    multiplicities(end) = [];
-    B = B - 1;
-    num_bins = num_bins - n_1;
-    counts = bin_values(:).*multiplicities(:);
-    counts_mat = cumsum_mat(counts);
-    mults_mat = cumsum_mat(multiplicities);
-    prob_mat = counts_mat./(n.*mults_mat); % probability within each block
-end
+F0 = F0_opt;
+V_approx = V0_opt;
 
 %% get assignment
-p_approx = zeros(num_bins,1);
-
-current_multibin = B;
-ix = num_bins;
-
-while ix > 0
-    t_prev = current_multibin;
-    t = backpointers(current_multibin);
-    while current_multibin > t
-        for m = 1:multiplicities(current_multibin)
-            p_approx(ix) = prob_mat(t+1,t_prev);
-            ix = ix - 1;
-        end
-        current_multibin = current_multibin - 1;
+p_approx = p_empirical(:).*0;
+if F0 > 0
+    backpointers(1) = i0_opt; % merge 1s with same symbols as 0s, since guaranteed to merge 0s at least with 1s
+end
+i = 1;
+while i <= B
+    j = backpointers(i);
+    if i == 1
+        x1 = 1;
+    else
+        x1 = mults_mat(1,i-1)+1;
+    end
+    x2 = mults_mat(1,j);
+    p_approx(x1:x2) = prob_mat(i,j);
+    i = j + 1;
+end
+continuous_part = 0; % probability mass of continuous part
+% add 0s in front
+if F0 > 0
+    x = mults_mat(1,i0_opt); % number of seen symbols in same level set as unseen symbols
+    if ~isinf(F0)
+        p_approx = [zeros(F0,1) ; p_approx];
+        p_approx(1:(x+F0)) = counts_mat(1,i0_opt)/(n*(x+F0));
+    else
+        continuous_part = counts_mat(1,i0_opt)/n;
+        p_approx(1:x) = [];
     end
 end
 
-%%
+%% get log probability of fingerprint
+V_approx = V_approx + gammaln(n+1) - sum(fing_values(:).*gammaln(fing_supp(:)+1)) - sum(gammaln(fing_values+1));
 
-V_approx = Vmax + gammaln(n+1) - sum(multiplicities(:).*gammaln(bin_values(:)+1)) - sum(gammaln(multiplicities+1));
+%% sort PML approximation in descending order
+p_approx = flipud(p_approx);
+
+have_continuous_part = isinf(F0);
 
 % % sort PML approximation in same order as input distribution
 % [~, sortperm] = sort(p,'ascend');
@@ -195,27 +151,6 @@ V_approx = Vmax + gammaln(n+1) - sum(multiplicities(:).*gammaln(bin_values(:)+1)
 % p_approx = p_approx(sortinvperm);
 %
 % p_approx = p_approx(:);
-
-end
-
-function [Vmax,imax] = f0(V, counts, multiplicities, F0, n, num_bins, B)
-Vmax = gammaln(num_bins+F0+1) + n*log(1/(num_bins+F0));
-imax = 0;
-for i = 1:B
-    c = sum(counts(i+1:end));
-    m = sum(multiplicities(i+1:end));
-    
-    if c > 0
-        proposal_reward = V(i) + gammaln(m+F0+1) + c*log((c/n)/(m+F0));
-    else
-        proposal_reward = V(i) + gammaln(m+F0+1);
-    end
-    
-    if proposal_reward > Vmax
-        Vmax = proposal_reward;
-        imax = i;
-    end
-end
 
 end
 

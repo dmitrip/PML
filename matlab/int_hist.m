@@ -1,5 +1,5 @@
 function h = int_hist(x)
-% int_hist(x) is a histogram of all integer values 1:max(x)
+% int_hist(x) is a histogram of all integer values 1:max(max(x))
 % this file created by Dmitri S. Pavlichin on May 23rd, 2017
 
 wid_x = size(x,2);
