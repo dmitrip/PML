@@ -27,11 +27,20 @@ F_est = estimate_fun_from_histogram(F, empirical_distribution)
 ```
 where `F` is a function(al) to be estimated and `empirical_distribution` is a collection of non-negative integers.  Zero-valued entries of the empirical distribution are ignored during estimation.  
 
-To assume a particular value for the support set size:
+When the support set size is assumed to be integer `K` (must be at least as large as the number of positive entries in `empirical_distribution`):
 ```python
 F_est = estimate_fun_from_histogram(F, empirical_distribution, K)
 ```
-where `K` is the integer-valued assumed support set size, must be at least as large as the number of positive entries in `empirical_distribution`.
 
 ## Computing the PML distribution
+If the underlying support set size is unknown, then we optimize over it.  Zero-valued entries in the `empirical_histogram` are ignored, so the inferred support might be smaller than the length of `empirical_histogram`:
+```python
+PML_approx = PML_distribution_approximate(empirical_distribution)
+```
+It's possible that the output `PML_approx` has sum less than 1 (for example, if each symbol occurs once, so `empirical_distribution` is a vector of ones).  The missing probability mass is the "continuous part" [Orlitsky, Santhanam, Viswanathan, Zhang, 2004], distributed over infinitely many symbols, and `PML_approx` is the "discrete part."
+
+When the support set size is assumed to be integer `K` (must be at least as large as the number of positive entries in `empirical_distribution`):
+```python
+PML_approx = PML_distribution_approximate(empirical_distribution, K)
+```
 
