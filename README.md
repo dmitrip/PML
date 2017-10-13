@@ -15,60 +15,15 @@ $$p^*_\text{PML} = \arg \max_p \sum_{\sigma \in S_\mathcal{X}} \mathbb{P}_p(\sig
 
 While $p^*$ is hard to compute (the optimization involves maximizing a matrix permanent), we can compute it efficiently approximately.  This package implements approximate PML and exact PML in small cases.
 
-## Matlab
+## Estimating symmetric functionals of distributions
 
-Computing the approximate PML distribution for a sample.  Samples must be positive-integer-valued.
+The PML distribution can be used as a plug-in estimator for symmetric functionals of distributions (that is, functionals that are invariant under relabeling of the support set, like entropy, Rényi entropy, support set size).
 
-```matlab
-sample = [1 2 1 3 4]'
-empirical_histogram = int_hist(sample) % output: [2 1 1 1]'
-p_PML_approx = PMLdistributionApproximate(empirical_histogram) % output: ones(8,1)./8
-```
-    
-For the above example, the inferred PML distribution has support size 8, whereas the sample contains only 4 distinct symbols.  If you want to assume a particular support set size, you can supply it as an optinal argument:
-
-```matlab
-p_PML_approx = PMLdistributionApproximate(empirical_histogram, 4) % output: ones(4,1)./4
-```
- 
-The approximate PML distribution may not have a finite support set size, in which case we say it has a "continuous" part (Ortlitsky et al. terminology).  In this case, a warning is displayed, the output contains only the discrete (non-continuous) part of the distribution, and the total probability mass of the discrete part of the distribution is less than 1.  For example, the empirical distribution [3 1 1] corresponds to an approximate PML distribution with continuous part of mass 0.4:
-
-```matlab
-p_PML_approx = PMLdistributionApproximate([3 1 1]) % output: 0.6, a warning is printed
-```
-
-### Estimating functionals of a distribution
-
-The PML distribution can be plugged into a functional of a distribution to obtain the PML plug-in estimate of the functional.  To estimate the entropy and R\'enyi entropy with $\alpha = 2$:
-
-```matlab
-p_PML_approx = PMLdistributionApproximate([2 1 1 1]) % output: ones(8,1)./8
-H_est = entropyOfDistribution(p_PML_approx) % output: 3 (log base 2)
-Renyi_est = renyiEntropyOfDistribution(p_PML_approx, 2) % output: 3 (log base 2)
-```
-    
-The functions `estEntroPMLapproximate` and `estRenyiEntroPMLapproximate` wrap the above steps into one function call and compute the PML plug-in estimates given a sample, rather than an empirical histogram.
-
-## Python
-
-Computing the approximate PML distribution for a sample.  Samples must be nonnegative-integer-valued.
-
+#### Usage
+When the support set size is unknown:
 ```python
-sample = [0,3,4,0,5]
-empirical_histogram = pml.int_hist(sample) # array([2, 0, 0, 1, 1, 1]) 
-p_PML_approx = pml.PML_distribution_approximate(empirical_histogram)[0] # ones(8)./8
+F_est = estimate_fun_from_histogram(F, empirical_distribution)
 ```
-### Estimating functionals of a distribution
+where `F` is a function(al) to be estimated and empirical distribution is a collection of non-negative integers.  Zero-valued entries of the empirical distribution are ignored during estimation.  
 
-The PML distribution can be plugged into a functional of a distribution to obtain the PML plug-in estimate of the functional.  To estimate the entropy and R\'enyi entropy with $\alpha = 2$:
-
-```python
-import pml
-sample = [1,3,4,1,5]
-H_est = pml.estimate_entropy_PML_approximate(sample) # H_est == 3.0
-RenyiH_est = pml.estimate_Renyi_entropy_PML_approximate(sample,2) # RenyiH_est 3.0
-```
-
-## Julia
-
-Coming soon.
+To assume a particular value for the support set size.
