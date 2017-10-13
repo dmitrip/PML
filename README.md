@@ -1,11 +1,7 @@
 # PML
 Profile maximum likelihood approximations (Julia, Matlab, and Python)
 
-<a name="logo"/>
-<div align="center">
-<img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML.png" alt="PML approximate distribution"></img>
-</a>
-</div>
+<p align="center"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML.png" alt="PML approximate distribution" width="50%" alt="PML approximate distribution" /></p>
 
 ## Profile maximum likelihood
 
