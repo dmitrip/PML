@@ -19,6 +19,7 @@ The PML distribution is hard to compute, but we can compute it efficiently appro
 Julia, Matlab, and Python implementations share the same interface.  See language-specific examples below.
 
 ### Estimating a symmetric functional of a distribution 
+###### Julia, Matlab, and Python
 We first compute the approximate PML distribution "under the hood" and then return the function(al) evaluated on the approximate PML distribution:
 ```python
 F_est = estimate_fun_from_histogram(F, empirical_distribution, [optional] K)
@@ -26,17 +27,29 @@ F_est = estimate_fun_from_histogram(F, empirical_distribution, [optional] K)
 where `F` is a function(al) to be estimated and `empirical_distribution` is a collection of non-negative integers.  `K` is an optional argument setting the assumed support set size (must be at least as large as the number of positive entries in `empirical_distribution`).  If `K` is not provided, then we optimize over the support set size.  Zero-valued entries of the empirical distribution are ignored during estimation.  
 
 ### Estimating a symmetric functional of multiple distributions 
-If `F` is a function(al) of D distributions -- like L₁ distance for D=2 -- then we need K empirical distributions to estimate it:
+###### Julia and Python only
+If `F` is a function(al) of D distributions -- like L₁ distance for D=2 -- then we need D empirical distributions of the same length to estimate it:
 ```python
 F_est = estimate_fun_from_multiple_histograms(F, [empirical_distribution_1, empirical_distribution_2])
 ```
 This can be used even for a single empirical distribution with D=1 (e.g. estimate entropy), but then you should expect worse performance than using `estimate_fun_from_histogram` from the previous section.  The reason is that for multiple histograms, the PML approximation relies on a heuristic that can be avoided with a special-purpose D=1 implementation.
 
-### Computing the PML distribution
-When the support set size is unknown, then we optimize over it.  Zero-valued entries in `empirical_histogram` are ignored, so the inferred support size (the length of the output `PML_approx`) might be smaller than the length of `empirical_histogram`:
+For now there is no option to set the assumed support set size.
+
+### Computing the approximate PML distribution
+###### Julia, Matlab, and Python
 ```python
 p = approximate_PML_from_histogram(empirical_distribution, [optional] K)
 ```
 where `empirical_distribution` is a collection of non-negative integers and `K` is an optional argument setting the assumed support set size (must be at least as large as the number of positive entries in `empirical_distribution`).  If `K` is not provided, then we optimize over the support set size.  Zero-valued entries of the empirical distribution are ignored, so the inferred support size (the length of the output `p`) might be smaller than the length of `empirical_histogram`.
 
 For some inputs, the output `p` has sum less than 1 (for example, if each symbol occurs once, so `empirical_distribution` is a vector of ones).  The missing probability mass is the "continuous part," distributed over infinitely many unobserved symbols, and the output `p` is the "discrete part."
+
+### Computing the approximate PML
+###### Julia and Python only
+Given D empirical distributions of the same length:
+```python
+p_list = approximate_PML_from_histogram([empirical_distribution_1, empirical_distribution_2, ...])
+```
+The output `p_list` is a list of the jointly approximated PML distributions.  For now there is no option to set the assumed support set size.
+
