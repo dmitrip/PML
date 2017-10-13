@@ -268,6 +268,20 @@ def approximate_PML_from_histogram(p_empirical, K=None):
     #return (p_approx, F0, V_approx, have_continuous_part)
     return p_approx
 
-def estimate_fun_from_histogram(p_empirical, K=None):
-    pass
+def entropy_of_distribution(vec,base=2.0):
+    # computes Shannon entropy of vector vec, default base 2
+    Z = np.sum(vec)
+    H = sum(-p*np.log(p) for p in vec if p > 0.0)
+    return (H/Z + np.log(Z))/np.log(base)
+
+def renyi_entropy_of_distribution(vec, alpha, base=2.0):
+    # computes Renyi entropy of vector vec, parameter alpha, default base 2
+    Z = np.sum(vec)
+    return (np.log(np.sum(np.power(p/Z,alpha) for p in vec))/(1-alpha)) / np.log(base)
+
+def estimate_fun_from_histogram(F, p_empirical, K=None):
+    # estimate function F of distribution
+    p_PML_approx = approximate_PML_from_histogram(p_empirical, K)
+    return F(p_PML_approx)
+
 
