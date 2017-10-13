@@ -67,7 +67,7 @@ Some functions of distributions are provided for convenience, others we can defi
 >>> Renyi = lambda p: pml.renyi_entropy_of_distribution(p, alpha=1.5) # Rényi entropy with α = 1.5, log base 2
 >>> support_set_size = lambda p: sum(x > 0 for x in p if x > 0)
 >>> L1 = pml.L1_distance # L₁ distance
->>> D_KL = lambda p,q: pml.KL_divergence(p, q, min_ratio=1e-6) # KL divergence with assumed min_x p[x]/q[x] = 1e-6
+>>> D_KL = lambda p,q: pml.KL_divergence(p, q, min_ratio=1e-6) # KL divergence with assumed min_x p[x]/q[x] = 1e-6 to avoid infinities
 ```
 
 ###### Julia
