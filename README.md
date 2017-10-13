@@ -1,5 +1,5 @@
 # PML
-Profile maximum likelihood approximations and estimation (in Julia, Matlab, and Python)
+Approximate profile maximum likelihood estimation (in Julia, Matlab, and Python)
 
 <p align="center"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML.png" alt="PML approximate distribution" width="50%" alt="PML approximate distribution" /></p>
 
@@ -49,12 +49,18 @@ For some inputs, the output `p` has sum less than 1 (for example, if each symbol
 ###### Julia and Python only
 Given D empirical distributions of the same length:
 ```python
-p_list = approximate_PML_from_histogram([empirical_distribution_1, empirical_distribution_2, ...])
+p_list = approximate_PML_from_multiple_histograms([empirical_distribution_1, empirical_distribution_2, ...])
 ```
 The output `p_list` is a list of the jointly approximated PML distributions.  For now there is no option to set the assumed support set size.
 
 ### Examples
 ###### Python
+Requires numpy and scipy.  Empirical histogram can be a list or numpy array.
+```python
+>>> import pml as pml
+>>> pml.approximate_PML_from_histogram([2, 1, 1]) # array([ 0.2,  0.2,  0.2,  0.2,  0.2])
+>>> pml.approximate_PML_from_histogram([2, 1, 1], 4) # array([ 0.25,  0.25,  0.25,  0.25])
+```
 
 ###### Julia
 
