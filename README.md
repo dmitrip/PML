@@ -9,7 +9,7 @@ Suppose we have `n` samples with empirical distribution (histogram) `p̂=(̂p[1]
 ```math
 pᴾᴹᴸ = argmaxₚ ∑_σ exp(-n D(σ̂p‖p)) / 𝓕₀!
 ```
-where the sum is over all permutations `σ` of the support set of distribution `p`, `𝓕₀` is the number of symbols seen 0 times empirically, and `D(·‖·)` is the Kullback-Leibler divergence.
+where the sum is over all permutations `σ` of the support set of distribution `p`, `𝓕₀` is the number of symbols seen 0 times empirically, and `D(·‖·)` is the Kullback-Leibler divergence.  The support set of `p` is generally not assumed known.
 
 The PML distribution can be used as a plug-in estimator for symmetric functionals of a distribution (that is, functionals that are invariant under relabeling, like entropy, Rényi entropy, distance to uniformity, support set size, support set coverage, and others) or functionals of multiple distributions (like L₁ distance, Kullback-Leibler divergence, and others).  [Acharya, Das, Orlitsky, and Suresh 2016](https://arxiv.org/abs/1611.02960) show that the PML approach yields a competitive estimator for symmetric functionals.
 
@@ -60,6 +60,14 @@ Requires numpy and scipy.  Empirical histogram can be a list or numpy array.
 >>> import pml as pml
 >>> pml.approximate_PML_from_histogram([2, 1, 1]) # array([ 0.2,  0.2,  0.2,  0.2,  0.2])
 >>> pml.approximate_PML_from_histogram([2, 1, 1], 4) # array([ 0.25,  0.25,  0.25,  0.25])
+```
+Some functions of distributions are provided for convenience, others we can define on the fly:
+```python
+>>> H = pml.entropy_of_distribution # Shannon entropy, log base 2
+>>> Renyi = lambda p: pml.renyi_entropy_of_distribution(p, alpha=1.5) # Rényi entropy with α = 1.5, log base 2
+>>> support_set_size = lambda p: sum(x > 0 for x in p if x > 0)
+>>> L1 = pml.L1_distance # L₁ distance
+>>> D_KL = lambda p,q: pml.KL_divergence(p, q, min_ratio=1e-6) # KL divergence with assumed min_x p[x]/q[x] = 1e-6
 ```
 
 ###### Julia
