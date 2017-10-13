@@ -1,17 +1,20 @@
 # PML
-Profile maximum likelihood approximations (Julia, Matlab, and Python)
+Profile maximum likelihood approximations and estimation (in Julia, Matlab, and Python)
 
 <p align="center"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML.png" alt="PML approximate distribution" width="50%" alt="PML approximate distribution" /></p>
 
 ## Profile maximum likelihood
 
-For samples $x_1^n = (x_1,\ldots,x_n)$ with empirical distribution $\hat{p}$, the profile maximum likelihood (PML) distribution $p^*_\text{PML}$ maximizes the probability of observing any relabeling of $\hat{p}$:
+Suppose we have `n` samples with empirical distribution (histogram) `p̂=(̂p[1], ̂p[2], ...)`.  A relabeling `σ̂p = (p̂[σ[1]], p̂[σ[2]], ...)` permutes the components of `p̂` according to permutation `σ`.  The profile maximum likelihood (PML) distribution maximizes the probability of observing any relabeling of the empirical distribution `p̂`, computed by:
+```math
+pᴾᴹᴸ = argmaxₚ ∑_σ exp(-n D(σ̂p‖p)) / 𝓕₀!
+```
+where the sum is over all permutations `σ` of the support set of distribution `p`, `𝓕₀` is the number of symbols seen 0 times empirically, and `D(·‖·)` is the Kullback-Leibler divergence.
 
-$$p^*_\text{PML} = \arg \max_p \sum_{\sigma \in S_\mathcal{X}} \mathbb{P}_p(\sigma \hat{p})$$
+The PML distribution can be used as a plug-in estimator for symmetric functionals of a distribution (that is, functionals that are invariant under relabeling, like entropy, Rényi entropy, distance to uniformity, support set size, support set coverage, and others) or functionals of multiple distributions (like L₁ distance, Kullback-Leibler divergence, and others).  [Acharya, Das, Orlitsky, and Suresh 2016](https://arxiv.org/abs/1611.02960) show that the PML approach yields a competitive estimator for symmetric functionals.
 
-While $p^*$ is hard to compute (the optimization involves maximizing a matrix permanent), we can compute it efficiently approximately.  This package implements approximate PML and exact PML in small cases.
+The PML distribution is hard to compute, but we can compute it efficiently approximately.  This package implements the approximations presented in [Pavlichin, Jiao, and Weissman 2017]. 
 
-The PML distribution can be used as a plug-in estimator for symmetric functionals of distributions (that is, functionals that are invariant under relabeling of the support set, like entropy, Rényi entropy, support set size).
 
 ## Usage
 Julia, Matlab, and Python implementations share the same interface.  See language-specific examples below.
