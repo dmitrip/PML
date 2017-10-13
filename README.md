@@ -15,34 +15,36 @@ The PML distribution can be used as a plug-in estimator for symmetric functional
 
 The PML distribution is hard to compute, but we can compute it efficiently approximately.  This package implements the approximations presented in [Pavlichin, Jiao, and Weissman 2017]. 
 
-
 ## Usage
 Julia, Matlab, and Python implementations share the same interface.  See language-specific examples below.
 
-### Estimating symmetric functionals of distributions
+### Estimating a symmetric functional of a distribution 
+###### (like entropy)
 
 We first compute the approximate PML distribution "under the hood" and then return the function(al) evaluated on the approximate PML distribution.
 
 When the underlying support set size is unknown:
 ```python
-F_est = estimate_fun_from_histogram(F, empirical_distribution)
+F_est = estimate_fun_from_histogram(F, empirical_distribution, [optional] K)
 ```
-where `F` is a function(al) to be estimated and `empirical_distribution` is a collection of non-negative integers.  Zero-valued entries of the empirical distribution are ignored during estimation.  
+where `F` is a function(al) to be estimated and `empirical_distribution` is a collection of non-negative integers.  `K` is an optional argument setting the assumed support set size (must be at least as large as the number of positive entries in `empirical_distribution`).  If `K` is not provided, then we optimize over the support set size.  Zero-valued entries of the empirical distribution are ignored during estimation.  
 
-When the support set size is assumed to be integer `K` (must be at least as large as the number of positive entries in `empirical_distribution`):
+### Estimating a symmetric functional of multiple distributions (like L₁ distance)
+If `F` is a function(al) of D distributions -- like L₁ distance for D=2 -- then we need K empirical distributions to estimate it:
 ```python
-F_est = estimate_fun_from_histogram(F, empirical_distribution, K)
+F_est = estimate_fun_from_multiple_histograms(F, [empirical_distribution_1, empirical_distribution_2])
 ```
+This can be used even for a single empirical distribution with D=1 (e.g. estimate entropy), but then you should expect worse performance than using `estimate_fun_from_histogram` from the previous section.  The reason is that for multiple histograms, the PML approximation relies on a heuristic that can be avoided with a special-purpose D=1 implementation.
 
 ### Computing the PML distribution
 When the support set size is unknown, then we optimize over it.  Zero-valued entries in `empirical_histogram` are ignored, so the inferred support size (the length of the output `PML_approx`) might be smaller than the length of `empirical_histogram`:
 ```python
-PML_approx = PML_distribution_approximate(empirical_distribution)
+p = approximate_PML_from_histogram(empirical_distribution)
 ```
-For some inputs, the output `PML_approx` has sum less than 1 (for example, if each symbol occurs once, so `empirical_distribution` is a vector of ones).  The missing probability mass is the "continuous part," distributed over infinitely many unobserved symbols, and `PML_approx` is the "discrete part."
+For some inputs, the output `p` has sum less than 1 (for example, if each symbol occurs once, so `empirical_distribution` is a vector of ones).  The missing probability mass is the "continuous part," distributed over infinitely many unobserved symbols, and the output `p` is the "discrete part."
 
 When the support set size is assumed to be integer `K` (must be at least as large as the number of positive entries in `empirical_distribution`):
 ```python
-PML_approx = PML_distribution_approximate(empirical_distribution, K)
+p = approximate_PML_from_histogram(empirical_distribution, K)
 ```
 
