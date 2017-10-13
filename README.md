@@ -45,7 +45,7 @@ where `empirical_distribution` is a collection of non-negative integers and `K` 
 
 For some inputs, the output `p` has sum less than 1 (for example, if each symbol occurs once, so `empirical_distribution` is a vector of ones).  The missing probability mass is the "continuous part," distributed over infinitely many unobserved symbols, and the output `p` is the "discrete part."
 
-### Computing the approximate PML
+### Computing multiple approximate PML distributions jointly
 ###### Julia and Python only
 Given D empirical distributions of the same length:
 ```python
@@ -53,3 +53,9 @@ p_list = approximate_PML_from_histogram([empirical_distribution_1, empirical_dis
 ```
 The output `p_list` is a list of the jointly approximated PML distributions.  For now there is no option to set the assumed support set size.
 
+### Examples
+###### Python
+
+###### Julia
+
+###### Matlab
