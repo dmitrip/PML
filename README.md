@@ -1,9 +1,9 @@
 # PML
-Profile maximum likelihood approximations
+Profile maximum likelihood approximations (Julia, Matlab, and Python)
 
 <a name="logo"/>
 <div align="center">
-<img src="https://github.com/dmitrip/PML/blob/master/.github/PML_approximation.png" alt="PML approximate distribution"></img>
+<img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML.png" alt="PML approximate distribution"></img>
 </a>
 </div>
 
@@ -22,7 +22,7 @@ Julia, Matlab, and Python implementations share the same interface.  See languag
 
 ### Estimating symmetric functionals of distributions
 
-To estimate a functional of a probability distribution we first compute the approximate PML distribution "under the hood" and then return the functional evaluated on the approximate PML distribution.
+We first compute the approximate PML distribution "under the hood" and then return the function(al) evaluated on the approximate PML distribution.
 
 When the underlying support set size is unknown:
 ```python
@@ -40,7 +40,7 @@ When the support set size is unknown, then we optimize over it.  Zero-valued ent
 ```python
 PML_approx = PML_distribution_approximate(empirical_distribution)
 ```
-It's possible that the output `PML_approx` has sum less than 1 (for example, if each symbol occurs once, so `empirical_distribution` is a vector of ones).  The missing probability mass is the "continuous part" [Orlitsky, Santhanam, Viswanathan, Zhang, 2004], distributed over infinitely many symbols, and `PML_approx` is the "discrete part."
+For some inputs, the output `PML_approx` has sum less than 1 (for example, if each symbol occurs once, so `empirical_distribution` is a vector of ones).  The missing probability mass is the "continuous part," distributed over infinitely many unobserved symbols, and `PML_approx` is the "discrete part."
 
 When the support set size is assumed to be integer `K` (must be at least as large as the number of positive entries in `empirical_distribution`):
 ```python
