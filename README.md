@@ -18,13 +18,13 @@ While $p^*$ is hard to compute (the optimization involves maximizing a matrix pe
 The PML distribution can be used as a plug-in estimator for symmetric functionals of distributions (that is, functionals that are invariant under relabeling of the support set, like entropy, Rényi entropy, support set size).
 
 ## Usage
-The Julia, Matlab, and Python implementations share the same interface.  See examples below.
+Julia, Matlab, and Python implementations share the same interface.  See language-specific examples below.
 
 ### Estimating symmetric functionals of distributions
 
 To estimate a functional of a probability distribution we first compute the approximate PML distribution "under the hood" and then return the functional evaluated on the approximate PML distribution.
 
-When the support set size is unknown:
+When the underlying support set size is unknown:
 ```python
 F_est = estimate_fun_from_histogram(F, empirical_distribution)
 ```
@@ -36,7 +36,7 @@ F_est = estimate_fun_from_histogram(F, empirical_distribution, K)
 ```
 
 ### Computing the PML distribution
-If the underlying support set size is unknown, then we optimize over it.  Zero-valued entries in the `empirical_histogram` are ignored, so the inferred support might be smaller than the length of `empirical_histogram`:
+When the support set size is unknown, then we optimize over it.  Zero-valued entries in `empirical_histogram` are ignored, so the inferred support size (the length of the output `PML_approx`) might be smaller than the length of `empirical_histogram`:
 ```python
 PML_approx = PML_distribution_approximate(empirical_distribution)
 ```
