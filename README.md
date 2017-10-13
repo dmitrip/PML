@@ -58,8 +58,8 @@ The output `p_list` is a list of the jointly approximated PML distributions.  Fo
 Requires numpy and scipy.  Empirical histogram can be a list or numpy array.
 ```python
 >>> import pml as pml
->>> pml.approximate_PML_from_histogram([2, 1, 1]) # array([ 0.2,  0.2,  0.2,  0.2,  0.2])
->>> pml.approximate_PML_from_histogram([2, 1, 1], 4) # array([ 0.25,  0.25,  0.25,  0.25])
+>>> pml.approximate_PML_from_histogram([2, 1, 1, 1]) # array([ 0.125,  0.125,  0.125,  0.125,  0.125,  0.125,  0.125,  0.125])
+>>> pml.approximate_PML_from_histogram([2, 1, 1, 1], 5) # array([ 0.2,  0.2,  0.2,  0.2,  0.2])
 ```
 Some functions of distributions are provided for convenience, others we can define on the fly:
 ```python
@@ -68,6 +68,10 @@ Some functions of distributions are provided for convenience, others we can defi
 >>> support_set_size = lambda p: sum(x > 0 for x in p if x > 0)
 >>> L1 = pml.L1_distance # L₁ distance
 >>> D_KL = lambda p,q: pml.KL_divergence(p, q, min_ratio=1e-6) # KL divergence with assumed min_x p[x]/q[x] = 1e-6 to avoid infinities
+```
+Now let's estimate them:
+```python
+>>> empirical_distribution = [
 ```
 
 ###### Julia
