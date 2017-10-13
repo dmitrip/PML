@@ -13,12 +13,20 @@ function [x, val] = maximize_on_interval_int(fun, x_min, x_max, tol)
 % Optional:
 %     * tol (float) - tolerance optimize
 %
+% Assumptions:
+%     * interval [x_min, x_max] includes at least one integer
+%
 % Returns:
 %     * x (int) - maximizing value of x
 %     * val - fun(x)
 
 if nargin == 3
     tol = 1e-14;
+end
+
+% check assumptions
+if ~(ceil(x_min) <= floor(x_max))
+    error('[x_min, x_max] interval must include at least one integer');
 end
 
 n_iter = 0;

@@ -22,7 +22,7 @@ else
         F0 = Inf;
     else
         fun = @(f0) gammaln(f0+T+1)-gammaln(f0+1)-n*log(f0+T);
-        F0 = maximize_on_interval_int(fun, 0, ceil((T^2-n)/(n-T)));
+        F0 = maximize_on_interval_int(fun, 0, ceil((T^2-n)/(n-T))+1);
     end
 end
 

@@ -13,9 +13,6 @@ function [p_approx,F0,V_approx,have_continuous_part] = PMLdistributionApproximat
 % Optional args:
 %     * K - (integer) assumed support set size, must have K >= sum(p > 0).  
 %         If K is not provided, then we attempt to estimate the support set size
-% %     * K_upper_bound - (integer) assumed maximum value for support set
-%         size, use when estimating support set size.  If K_upper_bound is
-%         not provided, then we set K_upper_bound = sum(p == 1)^2
 %
 % Returns:
 %     * p_approx - (column vector) approximate PML distribution, sorted in
@@ -38,11 +35,9 @@ function [p_approx,F0,V_approx,have_continuous_part] = PMLdistributionApproximat
 
 p_empirical = p_empirical(p_empirical > 0); % remove 0-counts
 
-fing = int_hist(p_empirical(:)+1);
-fing = fing(2:end);
+fing = int_hist(p_empirical(:));
 fing_supp = find(fing); % sorted in ascending order
 fing_values = fing(fing_supp);
-num_bins = sum(fing_values);
 
 B = length(fing_supp); % multibins, F_+
 n = sum(fing_supp.*fing_values); % bin counts times fing_values, sum(bm) = sum(p)
@@ -60,6 +55,7 @@ prob_mat = counts_mat./(n.*mults_mat); % probability within each block
 log_reward_mat = gammaln(mults_mat+1) + counts_mat.*log(prob_mat);
 log_reward_mat(isnan(log_reward_mat)) = 0.0; % handles 0 log 0 = 0 case, sets below diagonal entries to 0
 
+% dynamic programming
 % V[i] = best log reward for first i bins
 V = zeros(B,1); % V[B+1] = 0, values matrix
 backpointers = zeros(B,1)-1; % backpointers to get best log reward
