@@ -172,7 +172,7 @@ def approximate_PML_from_histogram(p_empirical, K=None):
     # check that assumed support set size is at least number of positive entries of p_empirical
     if K is not None:
         K_empirical = sum(x > 0 for x in p_empirical if x > 0)
-        assert K >= K_empirical, 'assumed support set size must not be less than number of positive entries of empirical distribution'
+        assert K >= K_empirical, 'assumed support set size must not be less than support set size of empirical distribution'
 
     p_empirical = np.array(p_empirical)
     p_empirical = p_empirical[p_empirical != 0] # remove 0-counts
