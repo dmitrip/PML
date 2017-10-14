@@ -26,6 +26,8 @@ The PML distribution is hard to compute, but we can compute it efficiently appro
 
 ## Performance plots
 
+For a more extensive performance evaluation see the paper [Pavlichin, Jiao, and Weissman 2017].
+
 Root mean squared error (RMSE) in estimating entropy (unknown support set size) and and L₁ distance from the uniform ditribution (known support set size).  The true support set for the uniform and mixture of 2 uniforms distributions is 10^4, where the mixture of 2 uniforms puts half its mass on the first 20% of symbols, and the other half on the remaining 80% of symbols.  The geometric distribution has mean 10^4.
 
 + `MLE` is the "naive" empirical distribution plug-in estimator
@@ -38,7 +40,7 @@ Root mean squared error (RMSE) in estimating entropy (unknown support set size) 
 
 RMSE in estimating the L₁ distance between distributions `p` (constant in each row below) and `q` (constant in each column below).  `Zipf(α)` is the distribution `p[i] ~ i^α` up to normalization with finite support 10^4.
 
-<p align="center"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML_performance_L1_distance_github.png" alt="performance of PML approximate distribution plug-in estimator" width="80%"/></p>
+<p align="center"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML_performance_L1_distance_github.png" alt="performance of PML approximate distribution plug-in estimator" width="60%"/></p>
 
 ## Usage
 
