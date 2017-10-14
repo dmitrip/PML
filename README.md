@@ -1,5 +1,5 @@
 # PML
-Approximate profile maximum likelihood estimation (in Julia, Matlab, and Python)
+Approximate profile maximum likelihood estimation.  This package implementats the algorithms in [Pavlichin, Jiao, and Weissman 2017] in Julia, Matlab, and Python.
 
 <p align="left"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML.png" alt="PML approximate distribution" width="50%"/></p>
 
@@ -20,11 +20,25 @@ Suppose we have `n` samples with empirical distribution (histogram) `p̂=(̂p[1]
 
 where the sum is over all permutations `σ` of the support set of distribution `p`, `𝓕₀` is the number of symbols seen 0 times empirically, and `D(·‖·)` is the Kullback-Leibler divergence.  The support set of `p` is generally not assumed known.  Any relabeling of `pᴾᴹᴸ` maximizes the expression above, so we order `pᴾᴹᴸ` arbitrarily.
 
-The PML distribution can be used in a plug-in estimator `F(pᴾᴹᴸ)` for a symmetric functional `F` of a distribution (that is, a functional that is invariant under relabeling, like entropy, Rényi entropy, distance to uniformity, support set size, support set coverage, and others).  The PML distribution can be generalized to 2 or more distributions approximated jointly, which can be used in a plug-in estimator `F(pᴾᴹᴸ, qᴾᴹᴸ)` for a symmetric functional of multiple distributions (like L₁ distance, Kullback-Leibler divergence, and others).  [Acharya, Das, Orlitsky, and Suresh 2016](https://arxiv.org/abs/1611.02960) show that the PML approach yields a competitive estimator for symmetric functionals.
+The PML distribution can be used in a plug-in estimator `F(pᴾᴹᴸ)` for a symmetric functional `F` of a distribution (that is, a functional that is invariant under relabeling, like entropy, Rényi entropy, distance to uniformity, support set size, support set coverage, and others).  The PML distribution can be generalized to 2 or more distributions approximated jointly, which can be used in a plug-in estimator `F(pᴾᴹᴸ, qᴾᴹᴸ)` for a symmetric functional of multiple distributions (like L₁ distance, Kullback-Leibler divergence, and others).  Acharya, Das, Orlitsky, and Suresh "A Unified Maximum Likelihood Approach for Optimal Distribution Property Estimation" 2016 [link](https://arxiv.org/abs/1611.02960) show that the PML approach yields a competitive estimator for symmetric functionals.
 
 The PML distribution is hard to compute, but we can compute it efficiently approximately.  This package implements the approximations presented in [Pavlichin, Jiao, and Weissman 2017]. 
 
 ## Performance plots
+
+Root mean squared error (RMSE) in estimating entropy (unknown support set size) and and L₁ distance from the uniform ditribution (known support set size).  The true support set for the uniform and mixture of 2 uniforms distributions is 10^4, where the mixture of 2 uniforms puts half its mass on the first 20% of symbols, and the other half on the remaining 80% of symbols.  The geometric distribution has mean 10^4.
+
++ `MLE` is the "naive" empirical distribution plug-in estimator
++ `VV` is Valiant and Valiant, "Estimating the unseen: improved estimators for entropy and other properties" 2017. [link](http://theory.stanford.edu/~valiant/papers/unseenJournal.pdf)
++ `JVHW` is Jiao, Venkat, Han, and Weissman, "Minimax Estimation of Functionals of Discrete Distributions" 2015 [link](https://arxiv.org/abs/1406.6956)
++ `WY` is Wu and Yang, "Minimax rates of entropy estimation on large alphabets via best polynomial approximation" 2014 [link](https://arxiv.org/abs/1407.0381).  This estimator requires the support set size as an input.
++ `approx. PML` is the method implemented here.
+
+<p align="center"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML_performance_github.png" alt="performance of PML approximate distribution plug-in estimator" width="100%"/></p>
+
+RMSE in estimating the L₁ distance between distributions `p` and `q`.  `Zipf(α)` is the distribution `p[i] ~ i^α` up to normalization with finite support 10^4.
+
+<p align="center"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML_performance_L1_distance_github.png" alt="performance of PML approximate distribution plug-in estimator" width="100%"/></p>
 
 ## Usage
 
