@@ -34,11 +34,11 @@ Root mean squared error (RMSE) in estimating entropy (unknown support set size) 
 + `WY` is Wu and Yang, "Minimax rates of entropy estimation on large alphabets via best polynomial approximation" 2014 [link](https://arxiv.org/abs/1407.0381).  This estimator requires the support set size as an input.
 + `approx. PML` is the method implemented here.
 
-<p align="center"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML_performance_github.png" alt="performance of PML approximate distribution plug-in estimator" width="100%"/></p>
+<p align="center"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML_performance_github.png" alt="performance of PML approximate distribution plug-in estimator" width="80%"/></p>
 
-RMSE in estimating the L₁ distance between distributions `p` and `q`.  `Zipf(α)` is the distribution `p[i] ~ i^α` up to normalization with finite support 10^4.
+RMSE in estimating the L₁ distance between distributions `p` (constant in each row below) and `q` (constant in each column below).  `Zipf(α)` is the distribution `p[i] ~ i^α` up to normalization with finite support 10^4.
 
-<p align="center"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML_performance_L1_distance_github.png" alt="performance of PML approximate distribution plug-in estimator" width="100%"/></p>
+<p align="center"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML_performance_L1_distance_github.png" alt="performance of PML approximate distribution plug-in estimator" width="80%"/></p>
 
 ## Usage
 
