@@ -1,5 +1,5 @@
 # PML
-Approximate profile maximum likelihood estimation.  This package implementats the algorithms in [Pavlichin, Jiao, and Weissman 2017] in Julia, Matlab, and Python.
+Approximate profile maximum likelihood estimation.  This package implements the algorithms in [Pavlichin, Jiao, and Weissman 2017] in Julia, Matlab, and Python.
 
 <p align="left"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML.png" alt="PML approximate distribution" width="50%"/></p>
 
