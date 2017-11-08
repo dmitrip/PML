@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/92552915.svg)](https://zenodo.org/badge/latestdoi/92552915)
+
 # PML
 Approximate profile maximum likelihood estimation.  This package implements the algorithms in [Pavlichin, Jiao, and Weissman 2017] in Julia, Matlab, and Python.
 
