@@ -83,7 +83,7 @@ for i=1:B
     else
         % optimize alphabet size
         % estimate number of unseen symbols for uniform distribution, N samples, empirical support set size T
-        F0 = ML_unseen_symbols_uniform(T, N);
+        F0 = ML_unseen_symbols_uniform(N, T);
     end
     % get value
     V0 = N*log(N/n);

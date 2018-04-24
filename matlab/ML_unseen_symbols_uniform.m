@@ -1,14 +1,14 @@
-function F0 = ML_unseen_symbols_uniform(T, n)
+function F0 = ML_unseen_symbols_uniform(n, T)
 % maximum likelihood estimate for number of unseen symbols given empirical
-% support set size T, n samples
+% support n samples, set size T
 %
 % created by Dmitri S. Pavlichin on October 2, 2017
 %
 % Matlab version: R2015a
 %
 % Args:
-%     * T (int) - empirical support set size
 %     * n (int) - sample size
+%     * T (int) - empirical support set size
 %
 % Returns:
 %     * F0 (int) - maximum likelihood estimator for number of unseen symbols
