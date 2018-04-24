@@ -1,7 +1,9 @@
 [![DOI](https://zenodo.org/badge/92552915.svg)](https://zenodo.org/badge/latestdoi/92552915)
 
 # PML
-Approximate profile maximum likelihood estimation.  This package implements the algorithms in [Pavlichin, Jiao, and Weissman 2017] in Julia, Matlab, and Python.
+Approximate profile maximum likelihood estimation.  This package implements the algorithms in [Pavlichin, Jiao, and Weissman 2017](https://arxiv.org/abs/1712.07177).
+
+Note: the current version of the code implements the approximate PML for functionals of a single distribution (like entropy and support set size) in Python.  Code for the multidimensional PML (for functionals of multiple distributions, like L1 distance) is coming soon, as is a Julia and Matlab implementation.
 
 <p align="left"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML.png" alt="PML approximate distribution" width="50%"/></p>
 
@@ -16,7 +18,7 @@ Approximate profile maximum likelihood estimation.  This package implements the 
 
 ## Profile maximum likelihood overview
 
-Suppose we have `n` samples with empirical distribution (histogram) `p̂=(̂p[1], ̂p[2], ...)`.  A relabeling `σ̂p = (p̂[σ[1]], p̂[σ[2]], ...)` permutes the components of `p̂` according to permutation `σ`.  The profile maximum likelihood (PML) distribution `pᴾᴹᴸ` maximizes the probability of observing any relabeling of the empirical distribution `p̂`, computed by:
+Suppose we have `n` samples with empirical distribution (histogram) `p̂=(̂p[1], ̂p[2], ...)`.  A relabeling `σ̂p = (p̂[σ[1]], p̂[σ[2]], ...)` permutes the components of `p̂` according to permutation `σ`.  The profile maximum likelihood (PML) distribution `pᴾᴹᴸ` maximizes the probability of observing any relabeling of the empirical distribution `p̂`.  Computing PML distribution turns out to be equivalent to solving the following optimization problem:
 
 <p align="center"><img src="https://github.com/dmitrip/PML/blob/master/.github/eq.png" alt="PML distribution" width="35%"/></p>
 
@@ -76,7 +78,7 @@ where `empirical_distribution` is a collection of non-negative integers and `K` 
 
 For some inputs, the output `p` has sum less than 1 (for example, if each symbol occurs once, so `empirical_distribution` is a vector of ones).  The missing probability mass is the "continuous part," distributed over infinitely many unobserved symbols, and the output `p` is the "discrete part."
 
-### Computing multiple approximate PML distributions jointly
+### Computing multiple approximate PML distributions jointly [code coming soon]
 ###### Julia and Python only
 Given D empirical distributions of the same length:
 ```python
