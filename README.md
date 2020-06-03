@@ -3,7 +3,7 @@
 # PML
 Approximate profile maximum likelihood estimation.  This package implements the algorithms in [Pavlichin, Jiao, and Weissman 2017](https://arxiv.org/abs/1712.07177).
 
-Note: the current version of the code implements the approximate PML for functionals of a single distribution (like entropy and support set size) in Python.  Code for the multidimensional PML (for functionals of multiple distributions, like L1 distance) is coming soon, as is a Julia and Matlab implementation.
+Note: the current version of the code implements the approximate PML for functionals of a single distribution (like entropy and support set size) in Python.  Code for the multidimensional PML (for functionals of multiple distributions, like L1 distance) is coming by end of July 2020, as is a Julia and Matlab implementation.
 
 <p align="left"><img src="https://github.com/dmitrip/PML/blob/master/.github/approx_PML.png" alt="PML approximate distribution" width="50%"/></p>
 
@@ -78,7 +78,7 @@ where `empirical_distribution` is a collection of non-negative integers and `K` 
 
 For some inputs, the output `p` has sum less than 1 (for example, if each symbol occurs once, so `empirical_distribution` is a vector of ones).  The missing probability mass is the "continuous part," distributed over infinitely many unobserved symbols, and the output `p` is the "discrete part."
 
-### Computing multiple approximate PML distributions jointly [code coming soon]
+### Computing multiple approximate PML distributions jointly [not working yet; anticipate having this by end of July, 2020]
 ###### Julia and Python only
 Given D empirical distributions of the same length:
 ```python
